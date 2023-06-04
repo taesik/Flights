@@ -20,6 +20,7 @@ public class FlightController : ControllerBase
     }
     
     Random random = new Random();
+    
     [HttpGet]
     public IEnumerable<FlightRm> Search()
     {
