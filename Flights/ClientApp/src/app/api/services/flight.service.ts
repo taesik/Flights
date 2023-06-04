@@ -23,20 +23,20 @@ export class FlightService extends BaseService {
   }
 
   /**
-   * Path part for operation flightGet
+   * Path part for operation searchFlight
    */
-  static readonly FlightGetPath = '/Flight';
+  static readonly SearchFlightPath = '/Flight';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `flightGet$Plain()` instead.
+   * To access only the response body, use `searchFlight$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  flightGet$Plain$Response(params?: {
+  searchFlight$Plain$Response(params?: {
   }): Observable<StrictHttpResponse<Array<FlightRm>>> {
 
-    const rb = new RequestBuilder(this.rootUrl, FlightService.FlightGetPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, FlightService.SearchFlightPath, 'get');
     if (params) {
     }
 
@@ -53,28 +53,28 @@ export class FlightService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `flightGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `searchFlight$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  flightGet$Plain(params?: {
+  searchFlight$Plain(params?: {
   }): Observable<Array<FlightRm>> {
 
-    return this.flightGet$Plain$Response(params).pipe(
+    return this.searchFlight$Plain$Response(params).pipe(
       map((r: StrictHttpResponse<Array<FlightRm>>) => r.body as Array<FlightRm>)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `flightGet()` instead.
+   * To access only the response body, use `searchFlight()` instead.
    *
    * This method doesn't expect any request body.
    */
-  flightGet$Response(params?: {
+  searchFlight$Response(params?: {
   }): Observable<StrictHttpResponse<Array<FlightRm>>> {
 
-    const rb = new RequestBuilder(this.rootUrl, FlightService.FlightGetPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, FlightService.SearchFlightPath, 'get');
     if (params) {
     }
 
@@ -91,14 +91,14 @@ export class FlightService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `flightGet$Response()` instead.
+   * To access the full response (for headers, for example), `searchFlight$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  flightGet(params?: {
+  searchFlight(params?: {
   }): Observable<Array<FlightRm>> {
 
-    return this.flightGet$Response(params).pipe(
+    return this.searchFlight$Response(params).pipe(
       map((r: StrictHttpResponse<Array<FlightRm>>) => r.body as Array<FlightRm>)
     );
   }

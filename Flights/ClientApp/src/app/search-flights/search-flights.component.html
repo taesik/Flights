@@ -27,8 +27,27 @@
       <label class="text-primary">to date</label>
     </div>
   </div>
+
+</div>
+<div class="col">
+  <button (click)="search()" type="submit" class="border-2 bg-blue-400 text-white rounded w-12" >
+      get
+  </button>
 </div>
 
 <div *ngFor="let flight of searchResult ">
-  {{flight}}
+  <h6 class="card-title">{{flight.airline}}</h6>
+  <div class="card-title">
+    {{flight.remainingNumberOfSeats}}
+  </div>
+
+  <div class="col m-2">
+    {{flight.departure?.place}}
+  </div>
+  <div class="col m-2">
+    {{flight.departure?.time | date}}
+  </div>
+  <div class="col m-2">
+    {{flight.departure?.time | date:'short time'}}
+  </div>
 </div>

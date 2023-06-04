@@ -1,14 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {FlightRm} from "../api/models/flight-rm";
+import {FlightService} from "../api/services/flight.service";
 
 @Component({
   selector: 'app-search-flights',
   templateUrl: './search-flights.component.html',
   styleUrls: ['./search-flights.component.css']
 })
-export class SearchFlightsComponent {
-  searchResult:any =[
-    'American airlines',
-    'British Airways',
-    'Britisas',
+export class SearchFlightsComponent implements OnInit{
+  searchResult:FlightRm[] =[
   ]
+  constructor(private flightService:FlightService) {
+
+  }
+  ngOnInit(): void {
+  }
+
+  search(): void {
+    this.flightService
+      .searchFlight({})
+      .subscribe(response=>{
+         this.searchResult = response;
+           this.handleError
+      })
+  }
+
+  private handleError(error: any): void {
+    console.log(error, 'Error ');
+  }
+
 }

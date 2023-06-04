@@ -12,6 +12,10 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Development Server",
         Url = "https://localhost:7098"
     });
+    c.CustomOperationIds(e =>
+    {
+     return $"{e.ActionDescriptor.RouteValues["action"]+ e.ActionDescriptor.RouteValues["controller"]}";
+    });
 });
 var app = builder.Build();
 app.UseCors(b => b.WithOrigins("*"));
