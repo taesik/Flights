@@ -20,12 +20,14 @@ export class SearchFlightsComponent implements OnInit{
     this.flightService
       .searchFlight({})
       .subscribe(response=>{
-         this.searchResult = response;
+         this.searchResult = response,
            this.handleError
       })
   }
 
   private handleError(error: any): void {
+    console.log('Response error Status: ' + error.status);
+    console.log('Response error Status Text: ' + error.statusText);
     console.log(error, 'Error ');
   }
 

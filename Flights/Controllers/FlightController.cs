@@ -13,37 +13,53 @@ public class FlightController : ControllerBase
     };
 
     private readonly ILogger<FlightController> _logger;
+    static Random random = new Random();
 
+    static private FlightRm[] flights =   new FlightRm[]
+    {
+        new (Guid.NewGuid(), 
+            "Deutsche BA",
+            random.Next(90,5000).ToString(),
+            new TimePlaceRm("Munchen", DateTime.Now.AddHours(
+                random.Next(1,10))),
+            new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
+                random.Next(4,15))),
+            random.Next(1,853)
+        ),
+        new (Guid.NewGuid(), 
+            "Deutscheasdas BA",
+            random.Next(90,5000).ToString(),
+            new TimePlaceRm("Munchen", DateTime.Now.AddHours(
+                random.Next(1,10))),
+            new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
+                random.Next(4,15))),
+            random.Next(1,853)
+        )
+    };
     public FlightController(ILogger<FlightController> logger)
     {
         _logger = logger;
     }
-    
-    Random random = new Random();
-    
+
     [HttpGet]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(typeof(FlightRm),200)]
     public IEnumerable<FlightRm> Search()
+        => flights;
+    
+    
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    [ProducesResponseType(typeof(FlightRm),200)]
+    [HttpGet("{id}")]
+    public ActionResult<FlightRm> Find(Guid id)
     {
-        return new FlightRm[]
-        {
-            new (Guid.NewGuid(), 
-                "Deutsche BA",
-                random.Next(90,5000).ToString(),
-                new TimePlaceRm("Munchen", DateTime.Now.AddHours(
-                    random.Next(1,10))),
-                new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
-                    random.Next(4,15))),
-                random.Next(1,853)
-                ),
-            new (Guid.NewGuid(), 
-                "Deutscheasdas BA",
-                random.Next(90,5000).ToString(),
-                new TimePlaceRm("Munchen", DateTime.Now.AddHours(
-                    random.Next(1,10))),
-                new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
-                    random.Next(4,15))),
-                random.Next(1,853)
-            )
-        };
+        var flight = flights.SingleOrDefault(f => f.Id == id);
+
+        if (flight == null) return NotFound();
+        
+        return  Ok(flight);
     }
 }

@@ -1,2 +1,40 @@
-<p>book-flight works!</p>
-<h2>Flight Id: {{flightId}}</h2>
+<h1 class="bg-blue-50 text-2xl ">book flight</h1>
+
+
+<div>
+  <h6 class="card-title">{{flight.airline}}</h6>
+  <div class="card-title">
+    {{flight.remainingNumberOfSeats}}
+  </div>
+  <div class="col m-2">
+    {{flight.departure?.place}}
+  </div>
+  <div class="col m-2">
+    {{flight.departure?.time | date}}
+  </div>
+  <div class="col m-2">
+    {{flight.departure?.time | date:'short time'}}
+  </div>
+  <i class="fas fa-usd">{{flight.price}}</i>
+  <br />
+  <strong >
+    To
+  </strong>
+  <div >
+    {{flight.arrival?.place}}
+  </div>
+  <div >
+    {{flight.arrival?.time | date:'short time'}}
+  </div>
+  <div class="border-2">
+    <span> Number of seats</span>
+    <input
+      class="border-2"
+      placeholder="Numer of Seats" type="text" name="" id="">
+    <button class="border-2 rounded bg-blue-500 text-white">
+      Book
+    </button>
+  </div>
+
+
+</div>

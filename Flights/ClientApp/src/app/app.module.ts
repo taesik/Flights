@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { SearchFlightsComponent } from './search-flights/search-flights.component';
 import { BookFlightComponent } from './book-flight/book-flight.component';
+import { RegisterUserComponent } from './register-user/register-user.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { BookFlightComponent } from './book-flight/book-flight.component';
     NavMenuComponent,
     SearchFlightsComponent,
     BookFlightComponent,
+    RegisterUserComponent,
 
   ],
   imports: [

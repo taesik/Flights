@@ -1,5 +1,7 @@
 import { Component,OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {FlightService} from "../api/services/flight.service";
+import {FlightRm} from "../api/models/flight-rm";
 
 @Component({
   selector: 'app-book-flight',
@@ -8,11 +10,15 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class BookFlightComponent implements OnInit{
 
-  constructor(private route:ActivatedRoute) {
+  constructor(private route:ActivatedRoute,
+              private flightService:FlightService,
+              private router:Router,
+              ) {
 
   }
 
   flightId:string = 'not loaded';
+  flight: FlightRm = {}
 
   ngOnInit(): void {
     this.route
@@ -24,6 +30,25 @@ export class BookFlightComponent implements OnInit{
   }
   private findFlight = (flightId:string | null) => {
     this.flightId = flightId ?? 'not passed';
+    this.flightService
+      .findFlight({id:this.flightId})
+      .subscribe(flight=> this.flight = flight,
+          this.handleError
+        )
   }
+  private handleError = (error: any): void => {
+    if(error.status ==400) {
+      alert('Flight not found');
+      // I must use Arrow function here not to set this.router undefined
+      this.router
+        .navigate(['/search-flights'])
+        .then(r => {
 
+      })
+    }
+
+    console.log('Response error Status: ' + error.status);
+    console.log('Response error Status Text: ' + error.statusText);
+    console.log(error, 'Error ');
+  }
 }
