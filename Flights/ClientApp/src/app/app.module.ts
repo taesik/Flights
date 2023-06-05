@@ -27,6 +27,7 @@ import { RegisterUserComponent } from './register-user/register-user.component';
       { path: '', component: SearchFlightsComponent, pathMatch: 'full' },
       { path: 'search-flights', component: SearchFlightsComponent},
       { path: 'book-flight/:flightId', component: BookFlightComponent},
+      { path: 'register-user', component: RegisterUserComponent},
     ])
   ],
   providers: [],
