@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserService } from '../api/services';
-import {Log} from "oidc-client";
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-register-user',
@@ -11,7 +12,9 @@ import {Log} from "oidc-client";
 export class RegisterUserComponent implements OnInit {
 
   constructor(private userService: UserService,
-              private fb: FormBuilder
+              private fb: FormBuilder,
+              private authService: AuthService,
+              private router: Router,
               ) {
 
   }
@@ -25,19 +28,36 @@ export class RegisterUserComponent implements OnInit {
   })
 
   ngOnInit(): void {
-  }
 
+  }
+  checkUser(): void {
+    const params =
+      {email: this.form.get('email')?.value ?? 'cannot found'}
+
+    this.userService
+      .findUser(params)
+      .subscribe(
+        this.login, e=> {
+          if (e.status != 404) {
+            console.error('e from checkUser() : ', e)
+          }
+        })
+  }
   register(): void {
     console.log('Form Values : ', this.form.value);
-    this.userService.registerUser(
+    this.userService
+      .registerUser(
       {
         body: this.form.value
       }
-    ).subscribe(_=> {
-      console.log('form posted to server');
-    })
+    )
+      .subscribe(
+        this.login, console.error
+    );
   }
 
-
-
+  private login=() =>{
+    this.authService.loginUser({email: this.form.get('email')?.value ?? 'cannot found '})
+    this.router.navigate(['/search-flights'])
+  }
 }

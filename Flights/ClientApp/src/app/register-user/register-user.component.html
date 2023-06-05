@@ -2,7 +2,7 @@
 
 <form [formGroup]="form" >
   <div class="">
-    <input formControlName="email" class="" placeholder="Email" type="text" name="" id="Email">
+    <input (blur)="checkUser()" formControlName="email" class="" placeholder="Email" type="text" name="" id="Email">
     <label class="" for="Email">Email</label>
   </div>
   <div class="">
