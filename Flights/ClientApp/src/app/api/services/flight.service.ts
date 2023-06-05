@@ -34,7 +34,7 @@ export class FlightService extends BaseService {
    * This method doesn't expect any request body.
    */
   searchFlight$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<Array<FlightRm>>> {
+  }): Observable<StrictHttpResponse<FlightRm>> {
 
     const rb = new RequestBuilder(this.rootUrl, FlightService.SearchFlightPath, 'get');
     if (params) {
@@ -46,7 +46,7 @@ export class FlightService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<FlightRm>>;
+        return r as StrictHttpResponse<FlightRm>;
       })
     );
   }
@@ -58,10 +58,10 @@ export class FlightService extends BaseService {
    * This method doesn't expect any request body.
    */
   searchFlight$Plain(params?: {
-  }): Observable<Array<FlightRm>> {
+  }): Observable<FlightRm> {
 
     return this.searchFlight$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<FlightRm>>) => r.body as Array<FlightRm>)
+      map((r: StrictHttpResponse<FlightRm>) => r.body as FlightRm)
     );
   }
 
@@ -72,7 +72,7 @@ export class FlightService extends BaseService {
    * This method doesn't expect any request body.
    */
   searchFlight$Response(params?: {
-  }): Observable<StrictHttpResponse<Array<FlightRm>>> {
+  }): Observable<StrictHttpResponse<FlightRm>> {
 
     const rb = new RequestBuilder(this.rootUrl, FlightService.SearchFlightPath, 'get');
     if (params) {
@@ -84,7 +84,7 @@ export class FlightService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<FlightRm>>;
+        return r as StrictHttpResponse<FlightRm>;
       })
     );
   }
@@ -96,10 +96,10 @@ export class FlightService extends BaseService {
    * This method doesn't expect any request body.
    */
   searchFlight(params?: {
-  }): Observable<Array<FlightRm>> {
+  }): Observable<FlightRm> {
 
     return this.searchFlight$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<FlightRm>>) => r.body as Array<FlightRm>)
+      map((r: StrictHttpResponse<FlightRm>) => r.body as FlightRm)
     );
   }
 

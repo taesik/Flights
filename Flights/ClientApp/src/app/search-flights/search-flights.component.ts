@@ -8,7 +8,7 @@ import {FlightService} from "../api/services/flight.service";
   styleUrls: ['./search-flights.component.css']
 })
 export class SearchFlightsComponent implements OnInit{
-  searchResult:FlightRm[] =[
+  searchResult:any =[
   ]
   constructor(private flightService:FlightService) {
 
