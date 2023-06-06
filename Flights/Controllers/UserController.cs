@@ -1,3 +1,4 @@
+using Flights.Data;
 using Flights.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Flights.Dtos;
@@ -10,7 +11,7 @@ namespace Flights.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        static private IList<User> Users = new List<User>();
+        static private readonly Entities Entities = new Entities();
 
         [HttpPost]
         [ProducesResponseType(201)]
@@ -18,7 +19,7 @@ namespace Flights.Controllers
         [ProducesResponseType(500)]
         public IActionResult Register(NewUserDto dto)
         {
-            Users.Add(
+            Entities.Users.Add(
                 new User(
                     dto.Email,
                     dto.FirstName,
@@ -26,7 +27,7 @@ namespace Flights.Controllers
                     dto.Gender
                 )
             );
-            System.Diagnostics.Debug.WriteLine(Users.Count);
+            System.Diagnostics.Debug.WriteLine(Entities.Users.Count);
             return CreatedAtAction(nameof(Find),
                 new { email = dto.Email });
         }
@@ -34,7 +35,7 @@ namespace Flights.Controllers
         [HttpGet("{email}")]
         public ActionResult<PassengerRm> Find(string email)
         {
-            var passenger = Users.FirstOrDefault(
+            var passenger = Entities.Users.FirstOrDefault(
                 x => x.Email == email
             );
 

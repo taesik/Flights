@@ -1,4 +1,5 @@
-﻿using Flights.Domain.Entities;
+﻿using Flights.Data;
+using Flights.Domain.Entities;
 using Flights.Domain.Errors;
 using Flights.Dtos;
 using Flights.ReadModels;
@@ -11,31 +12,8 @@ namespace Flights.Controllers;
 public class FlightController : ControllerBase
 {
     private readonly ILogger<FlightController> _logger;
-
+    static private readonly Entities Entities = new Entities();
     static Random random = new Random();
-
-    static private Flight[] flights = new Flight[]
-    {
-        new(Guid.NewGuid(),
-            "Deutsche BA",
-            random.Next(90, 5000).ToString(),
-            new TimePlace("Munchen", DateTime.Now.AddHours(
-                random.Next(1, 10))),
-            new TimePlace("Schiphol", DateTime.Now.AddHours(
-                random.Next(4, 15))),
-            2
-        ),
-        new(Guid.NewGuid(),
-            "Deutscheasdas BA",
-            random.Next(90, 5000).ToString(),
-            new TimePlace("Munchen", DateTime.Now.AddHours(
-                random.Next(1, 10))),
-            new TimePlace("Schiphol", DateTime.Now.AddHours(
-                random.Next(4, 15))),
-            random.Next(1, 853)
-        )
-    };
-
 
     public FlightController(ILogger<FlightController> logger)
     {
@@ -48,7 +26,7 @@ public class FlightController : ControllerBase
     [ProducesResponseType(typeof(FlightRm), 200)]
     public IEnumerable<FlightRm> Search()
     {
-        var fRm = flights.Select(flight => new FlightRm(
+        var fRm = Entities.Flights.Select(flight => new FlightRm(
             flight.Id,
             flight.Airline,
             flight.Price,
@@ -72,7 +50,7 @@ public class FlightController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<FlightRm> Find(Guid id)
     {
-        var flight = flights.SingleOrDefault(f => f.Id == id);
+        var flight = Entities.Flights.SingleOrDefault(f => f.Id == id);
 
         if (flight == null) return NotFound();
 
@@ -104,7 +82,7 @@ public class FlightController : ControllerBase
             $"Booking a new flight {dto.FlightId}"
         );
 
-        var flight = flights.SingleOrDefault(f => f.Id == dto.FlightId);
+        var flight = Entities.Flights.SingleOrDefault(f => f.Id == dto.FlightId);
 
         if (flight == null) return NotFound();
 
