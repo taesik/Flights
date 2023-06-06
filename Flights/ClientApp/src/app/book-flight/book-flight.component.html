@@ -16,25 +16,32 @@
     {{flight.departure?.time | date:'short time'}}
   </div>
   <i class="fas fa-usd">{{flight.price}}</i>
-  <br />
-  <strong >
+  <br/>
+  <strong>
     To
   </strong>
-  <div >
+  <div>
     {{flight.arrival?.place}}
   </div>
-  <div >
+  <div>
     {{flight.arrival?.time | date:'short time'}}
   </div>
-  <div class="border-2">
-    <span> Number of seats</span>
-    <input
-      class="border-2"
-      placeholder="Numer of Seats" type="text" name="" id="">
-    <button class="border-2 rounded bg-blue-500 text-white">
-      Book
-    </button>
-  </div>
+
+  <form [formGroup]="form" (ngSubmit)="book()" action="">
+    <div class="border-2">
+      <span> Number of seats</span>
+      <input
+        formControlName="number"
+        class="border-2"
+        placeholder="Numer of Seats"
+        type="number"
+        name="" id="">
+      <button type="submit"
+              class="border-2 rounded bg-blue-500 text-white">
+        Book
+      </button>
+    </div>
+  </form>
 
 
 </div>

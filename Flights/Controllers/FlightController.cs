@@ -1,4 +1,5 @@
-﻿using Flights.ReadModels;
+﻿using Flights.Dtos;
+using Flights.ReadModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flights.Controllers;
@@ -13,29 +14,33 @@ public class FlightController : ControllerBase
     };
 
     private readonly ILogger<FlightController> _logger;
+
     static Random random = new Random();
 
-    static private FlightRm[] flights =   new FlightRm[]
+    static private FlightRm[] flights = new FlightRm[]
     {
-        new (Guid.NewGuid(), 
+        new(Guid.NewGuid(),
             "Deutsche BA",
-            random.Next(90,5000).ToString(),
+            random.Next(90, 5000).ToString(),
             new TimePlaceRm("Munchen", DateTime.Now.AddHours(
-                random.Next(1,10))),
+                random.Next(1, 10))),
             new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
-                random.Next(4,15))),
-            random.Next(1,853)
+                random.Next(4, 15))),
+            random.Next(1, 853)
         ),
-        new (Guid.NewGuid(), 
+        new(Guid.NewGuid(),
             "Deutscheasdas BA",
-            random.Next(90,5000).ToString(),
+            random.Next(90, 5000).ToString(),
             new TimePlaceRm("Munchen", DateTime.Now.AddHours(
-                random.Next(1,10))),
+                random.Next(1, 10))),
             new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
-                random.Next(4,15))),
-            random.Next(1,853)
+                random.Next(4, 15))),
+            random.Next(1, 853)
         )
     };
+
+    static private IList<BookDto> Bookings = new List<BookDto>();
+
     public FlightController(ILogger<FlightController> logger)
     {
         _logger = logger;
@@ -44,22 +49,31 @@ public class FlightController : ControllerBase
     [HttpGet]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
-    [ProducesResponseType(typeof(FlightRm),200)]
+    [ProducesResponseType(typeof(FlightRm), 200)]
     public IEnumerable<FlightRm> Search()
         => flights;
-    
-    
+
+
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
-    [ProducesResponseType(typeof(FlightRm),200)]
+    [ProducesResponseType(typeof(FlightRm), 200)]
     [HttpGet("{id}")]
     public ActionResult<FlightRm> Find(Guid id)
     {
         var flight = flights.SingleOrDefault(f => f.Id == id);
 
         if (flight == null) return NotFound();
-        
-        return  Ok(flight);
+
+        return Ok(flight);
+    }
+
+    [HttpPost]
+    public void Book(BookDto dto)
+    {
+        System.Diagnostics.Debug.WriteLine(
+            $"Booking a new flight {dto.FlightId}"
+        );
+        Bookings.Add(dto);
     }
 }
