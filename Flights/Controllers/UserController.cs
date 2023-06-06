@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Flights.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Flights.Dtos;
 using Flights.ReadModels;
@@ -14,19 +10,25 @@ namespace Flights.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        static private IList<NewUserDto> Users = 
-            new List<NewUserDto>();
-        
+        static private IList<User> Users = new List<User>();
+
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult Register(NewUserDto dto)
         {
-            Users.Add(dto);
+            Users.Add(
+                new User(
+                    dto.Email,
+                    dto.FirstName,
+                    dto.LastName,
+                    dto.Gender
+                )
+            );
             System.Diagnostics.Debug.WriteLine(Users.Count);
-            return CreatedAtAction(nameof(Find), 
-                new { email=dto.Email });
+            return CreatedAtAction(nameof(Find),
+                new { email = dto.Email });
         }
 
         [HttpGet("{email}")]
@@ -35,15 +37,15 @@ namespace Flights.Controllers
             var passenger = Users.FirstOrDefault(
                 x => x.Email == email
             );
-            
-            if(passenger == null) return NotFound();
+
+            if (passenger == null) return NotFound();
             var rm = new PassengerRm(
                 passenger.Email,
                 passenger.FirstName,
                 passenger.LastName,
                 passenger.Gender
             );
-            
+
             return Ok(passenger);
         }
     }

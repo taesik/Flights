@@ -1,4 +1,6 @@
-﻿using Flights.Dtos;
+﻿using Flights.Domain.Entities;
+using Flights.Domain.Errors;
+using Flights.Dtos;
 using Flights.ReadModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,38 +10,32 @@ namespace Flights.Controllers;
 [Route("[controller]")]
 public class FlightController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<FlightController> _logger;
 
     static Random random = new Random();
 
-    static private FlightRm[] flights = new FlightRm[]
+    static private Flight[] flights = new Flight[]
     {
         new(Guid.NewGuid(),
             "Deutsche BA",
             random.Next(90, 5000).ToString(),
-            new TimePlaceRm("Munchen", DateTime.Now.AddHours(
+            new TimePlace("Munchen", DateTime.Now.AddHours(
                 random.Next(1, 10))),
-            new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
+            new TimePlace("Schiphol", DateTime.Now.AddHours(
                 random.Next(4, 15))),
-            random.Next(1, 853)
+            2
         ),
         new(Guid.NewGuid(),
             "Deutscheasdas BA",
             random.Next(90, 5000).ToString(),
-            new TimePlaceRm("Munchen", DateTime.Now.AddHours(
+            new TimePlace("Munchen", DateTime.Now.AddHours(
                 random.Next(1, 10))),
-            new TimePlaceRm("Schiphol", DateTime.Now.AddHours(
+            new TimePlace("Schiphol", DateTime.Now.AddHours(
                 random.Next(4, 15))),
             random.Next(1, 853)
         )
     };
 
-    static private IList<BookDto> Bookings = new List<BookDto>();
 
     public FlightController(ILogger<FlightController> logger)
     {
@@ -51,7 +47,22 @@ public class FlightController : ControllerBase
     [ProducesResponseType(500)]
     [ProducesResponseType(typeof(FlightRm), 200)]
     public IEnumerable<FlightRm> Search()
-        => flights;
+    {
+        var fRm = flights.Select(flight => new FlightRm(
+            flight.Id,
+            flight.Airline,
+            flight.Price,
+            new TimePlaceRm(flight.Departure.Place.ToString(),
+                flight.Departure.Time
+            ),
+            new TimePlaceRm(flight.Arrival.Place.ToString(),
+                flight.Arrival.Time
+            ),
+            flight.RemainingNumberOfSeats
+        )).ToArray();
+
+        return fRm;
+    }
 
 
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,7 +76,21 @@ public class FlightController : ControllerBase
 
         if (flight == null) return NotFound();
 
-        return Ok(flight);
+        var readModel = new FlightRm(
+            flight.Id,
+            flight.Airline,
+            flight.Price,
+            new TimePlaceRm(
+                flight.Departure.Place.ToString(),
+                flight.Departure.Time
+            ), new TimePlaceRm(
+                flight.Arrival.Place.ToString(),
+                flight.Arrival.Time
+            ),
+            flight.RemainingNumberOfSeats
+        );
+
+        return Ok(readModel);
     }
 
     [HttpPost]
@@ -79,11 +104,15 @@ public class FlightController : ControllerBase
             $"Booking a new flight {dto.FlightId}"
         );
 
-        var flightFound = flights.Any(f => f.Id == dto.FlightId);
+        var flight = flights.SingleOrDefault(f => f.Id == dto.FlightId);
 
-        if (!flightFound) return NotFound();
+        if (flight == null) return NotFound();
 
-        Bookings.Add(dto);
+        var err = flight.MakeBooking(dto.PassengerEmail, dto.NumberOfSeats);
+
+        if (err is OverbookError)
+            return Conflict(new { message = "Not enough seats" });
+
         return CreatedAtAction(nameof(Find), new { id = dto.FlightId });
     }
 }

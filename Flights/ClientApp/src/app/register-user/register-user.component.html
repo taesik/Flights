@@ -1,29 +1,43 @@
-
-
-<form [formGroup]="form" >
+<form [formGroup]="form">
   <div class="">
     <input (blur)="checkUser()" formControlName="email" class="" placeholder="Email" type="text" name="" id="Email">
     <label class="" for="Email">Email</label>
+    <div *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)"
+         class="invalid-feedback d-block">
+      <div *ngIf="form.controls.email.errors">
+        Email is invalid
+      </div>
+    </div>
+
   </div>
   <div class="">
     <input formControlName="firstName" class="" placeholder="First Name" type="text" name="" id="firstName">
     <label class="" for="firstName">First Name</label>
+    <div *ngIf="form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)">
+      <div *ngIf="form.controls.firstName.errors">
+        First Name is invalid
+      </div>
+    </div>
   </div>
 
   <div class="">
-    <input  formControlName="lastName" class="" placeholder="Last Name" type="text" name="" id="lastName">
+    <input formControlName="lastName" class="" placeholder="Last Name" type="text" name="" id="lastName">
     <label class="" for="lastName">Last Name</label>
+    <div *ngIf="form.controls.lastName.invalid && (form.controls.lastName.dirty || form.controls.lastName.touched)">
+      <div *ngIf="form.controls.lastName">
+        last name is invalid
+      </div>
+    </div>
   </div>
-
 
 
   <div class="">
     <input formControlName="isFemale" class="" placeholder="Last Name"
-           [value]=true type="radio"  id="isFemale">
+           [value]=true type="radio" id="isFemale">
     <label for="isFemale">Female</label>
   </div>
   <div class="">
-    <input formControlName="isFemale" type="radio"  id="isFemale"
+    <input formControlName="isFemale" type="radio" id="isFemale"
            [value]=false>
     <label for="isFemale">Male</label>
   </div>
