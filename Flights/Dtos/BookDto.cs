@@ -1,7 +1,9 @@
-﻿namespace Flights.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Flights.Dtos;
 
 public record BookDto(
-    Guid FlightId,
-    string PassengerEmail,
-    byte NumberOfSeats
+    [Required] Guid FlightId,
+    [Required] string PassengerEmail,
+    [Required] byte NumberOfSeats
 );
