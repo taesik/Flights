@@ -33,6 +33,9 @@ namespace Flights.Controllers
                     dto.Gender
                 )
             );
+            //save on DB
+            _entities.SaveChanges();
+
             return CreatedAtAction(nameof(Find),
                 new { email = dto.Email });
         }

@@ -12,4 +12,12 @@ public class Entities : DbContext
     public Entities(DbContextOptions<Entities> options) : base(options)
     {
     }
+
+
+    protected override void OnModelCreating(ModelBuilder mb)
+    {
+        mb.Entity<User>().HasKey(p => p.Email);
+        mb.Entity<Flight>().OwnsOne(f => f.Departure);
+        mb.Entity<Flight>().OwnsOne(f => f.Arrival);
+    }
 }
