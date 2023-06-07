@@ -11,7 +11,13 @@ namespace Flights.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        static private readonly Entities Entities = new Entities();
+        private readonly Entities _entities;
+
+
+        public UserController(Entities entities)
+        {
+            _entities = entities;
+        }
 
         [HttpPost]
         [ProducesResponseType(201)]
@@ -19,7 +25,7 @@ namespace Flights.Controllers
         [ProducesResponseType(500)]
         public IActionResult Register(NewUserDto dto)
         {
-            Entities.Users.Add(
+            _entities.Users.Add(
                 new User(
                     dto.Email,
                     dto.FirstName,
@@ -27,7 +33,6 @@ namespace Flights.Controllers
                     dto.Gender
                 )
             );
-            System.Diagnostics.Debug.WriteLine(Entities.Users.Count);
             return CreatedAtAction(nameof(Find),
                 new { email = dto.Email });
         }
@@ -35,7 +40,7 @@ namespace Flights.Controllers
         [HttpGet("{email}")]
         public ActionResult<PassengerRm> Find(string email)
         {
-            var passenger = Entities.Users.FirstOrDefault(
+            var passenger = _entities.Users.FirstOrDefault(
                 x => x.Email == email
             );
 

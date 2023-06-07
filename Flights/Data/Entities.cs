@@ -1,31 +1,15 @@
 ﻿using Flights.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flights.Data;
 
-public class Entities
+public class Entities : DbContext
 {
-    public IList<User> Users = new List<User>();
-    static Random random = new Random();
+    public DbSet<User> Users => Set<User>();
 
-    public Flight[] Flights = new Flight[]
+    public DbSet<Flight> Flights => Set<Flight>();
+
+    public Entities(DbContextOptions<Entities> options) : base(options)
     {
-        new(Guid.NewGuid(),
-            "Deutsche BA",
-            random.Next(90, 5000).ToString(),
-            new TimePlace("Munchen", DateTime.Now.AddHours(
-                random.Next(1, 10))),
-            new TimePlace("Schiphol", DateTime.Now.AddHours(
-                random.Next(4, 15))),
-            2
-        ),
-        new(Guid.NewGuid(),
-            "Deutscheasdas BA",
-            random.Next(90, 5000).ToString(),
-            new TimePlace("Munchen", DateTime.Now.AddHours(
-                random.Next(1, 10))),
-            new TimePlace("Schiphol", DateTime.Now.AddHours(
-                random.Next(4, 15))),
-            random.Next(1, 853)
-        )
-    };
+    }
 }
