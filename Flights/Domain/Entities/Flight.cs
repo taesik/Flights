@@ -56,5 +56,24 @@ namespace Flights.Domain.Entities
 
             return null;
         }
+
+        public object? CancelBooking(string userEmail, byte numberOfSeats)
+        {
+            var booking = Bookings.FirstOrDefault(b =>
+            {
+                return numberOfSeats == b.NumberOfSeats
+                       &&
+                       userEmail.ToLower() == b.PassengerEmail.ToLower();
+            });
+            if (booking == null)
+            {
+                return new NotFoundError();
+            }
+            Bookings.Remove(booking);
+            RemainingNumberOfSeats += booking.NumberOfSeats;
+
+
+            return null;
+        }
     }
 }
