@@ -4,6 +4,7 @@ using Flights.Domain.Errors;
 using Flights.Dtos;
 using Flights.ReadModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flights.Controllers;
 
@@ -95,7 +96,14 @@ public class FlightController : ControllerBase
             return Conflict(new { message = "Not enough seats" });
 
         //save on db
-        _entities.SaveChanges();
+        try
+        {
+            _entities.SaveChanges();
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            return Conflict(new { message = "An error occurred while booking" });
+        }
 
 
         return CreatedAtAction(nameof(Find), new { id = dto.FlightId });

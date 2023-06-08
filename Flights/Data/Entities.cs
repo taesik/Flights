@@ -17,6 +17,9 @@ public class Entities : DbContext
     protected override void OnModelCreating(ModelBuilder mb)
     {
         mb.Entity<User>().HasKey(p => p.Email);
+
+        mb.Entity<Flight>().Property(p => p.RemainingNumberOfSeats)
+            .IsConcurrencyToken();
         mb.Entity<Flight>().OwnsOne(f => f.Departure);
         mb.Entity<Flight>().OwnsOne(f => f.Arrival);
     }
